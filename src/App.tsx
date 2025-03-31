@@ -11,10 +11,10 @@ function App() {
   const [lineWidth, setLineWidth] = useState(`20%`);
   const [lineColor, setLineColor] = useState(`red`);
 
-  const checkRefCap = useRef<boolean>(true);
-  const checkRefSmall = useRef<boolean>(true);
-  const checkRefSymbols = useRef<boolean>(false);
-  const checkRefNums = useRef<boolean>(false);
+  const checkRefCap = useRef<HTMLInputElement>(null);
+  const checkRefSmall = useRef<HTMLInputElement>(null);
+  const checkRefSymbols = useRef<HTMLInputElement>(null);
+  const checkRefNums = useRef<HTMLInputElement>(null);
 
   const AToZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const aToz = "abcdefghijklmnopqrstuvwxyz";
@@ -23,6 +23,8 @@ function App() {
 
   useEffect(() => {
     generatePassword();
+    checkRefCap.current.checked = true;
+    checkRefSmall.current.checked = true;
   }, []);
 
   let a = "";
@@ -130,10 +132,10 @@ function App() {
               className="icons"
               onClick={() => {
                 navigator.clipboard.writeText(password);
-                setShowAlert(true);
-                setTimeout(() => {
-                  setShowAlert(false);
-                }, 4000);
+                // setShowAlert(true);
+                // setTimeout(() => {
+                //   setShowAlert(false);
+                // }, 4000);
               }}
             />
 
