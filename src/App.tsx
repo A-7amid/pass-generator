@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import AlertCopied from "./components/AlertCopied";
+import { useEffect, useState } from "react";
+// import AlertCopied from "./components/AlertCopied";
 
 function App() {
   const [passwordLength, setPasswordLength] = useState(4);
   const [password, setPassword] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
+  // const [showAlert, setShowAlert] = useState<boolean>(false);
 
   const AToZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const aToz = "abcdefghijklmnopqrstuvwxyz";
@@ -20,7 +20,7 @@ function App() {
     const symbol = document.getElementById("symbol") as HTMLInputElement;
 
     const arr = [""];
-    let mainArr = [];
+    let mainArr: string[] = [];
 
     if (capital.checked) arr.push(AToZ);
     if (small.checked) arr.push(aToz);
@@ -60,10 +60,10 @@ function App() {
             <svg
               onClick={() => {
                 navigator.clipboard.writeText(password);
-                setShowAlert(true);
-                setTimeout(() => {
-                  setShowAlert(false);
-                }, 2000);
+                // setShowAlert(true);
+                // setTimeout(() => {
+                //   setShowAlert(false);
+                // }, 2000);
               }}
               className="icons"
               xmlns="http://www.w3.org/2000/svg"
@@ -169,11 +169,11 @@ function App() {
         </button>
       </div>
 
-      {showAlert && (
+      {/* {showAlert && (
         <div className="absolute top-7">
           <AlertCopied setShowAlert={setShowAlert} />
-        </div>
-      )}
+        </div> */}
+      {/* )} */}
     </div>
   );
 }
