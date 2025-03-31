@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { LuCopy, LuRefreshCw } from "react-icons/lu";
 // import AlertCopied from "./components/AlertCopied";
-import { FaCheck } from "react-icons/fa";
+// import { FaCheck } from "react-icons/fa";
 
 function App() {
   const [passwordLength, setPasswordLength] = useState(8);
@@ -20,12 +20,6 @@ function App() {
   const aToz = "abcdefghijklmnopqrstuvwxyz";
   const numbers = "0123456789";
   const symbols = "!@#$%^&*()_+[]{}|;:,.<>?";
-
-  useEffect(() => {
-    generatePassword();
-    checkRefCap.current.checked = true;
-    checkRefSmall.current.checked = true;
-  }, []);
 
   let a = "";
 
@@ -57,10 +51,16 @@ function App() {
   };
 
   useEffect(() => {
+    generatePassword();
+    if (checkRefCap.current) checkRefCap.current.checked = true;
+    if (checkRefSmall.current) checkRefSmall.current.checked = true;
+  }, []);
+
+  useEffect(() => {
     if (
       passwordLength === 4 &&
-      checkRefNums.current.checked == false &&
-      checkRefSymbols.current.checked == false
+      checkRefNums.current?.checked == false &&
+      checkRefSymbols.current?.checked == false
     ) {
       setPasswordStrength("Very Weak");
 
@@ -72,8 +72,8 @@ function App() {
       setLineColor("orange");
     } else if (
       passwordLength < 8 &&
-      checkRefNums.current.checked == false &&
-      checkRefSymbols.current.checked == false
+      checkRefNums.current?.checked == false &&
+      checkRefSymbols.current?.checked == false
     ) {
       setPasswordStrength("Weak");
       setLineWidth("40%");
@@ -84,8 +84,8 @@ function App() {
       setLineColor("yellow");
     } else if (
       passwordLength < 12 &&
-      checkRefNums.current.checked == false &&
-      checkRefSymbols.current.checked == false
+      checkRefNums.current?.checked == false &&
+      checkRefSymbols.current?.checked == false
     ) {
       setPasswordStrength("Medium");
 
@@ -98,8 +98,8 @@ function App() {
       setLineColor("green");
     } else if (
       passwordLength < 16 &&
-      checkRefNums.current.checked == false &&
-      checkRefSymbols.current.checked == false
+      checkRefNums.current?.checked == false &&
+      checkRefSymbols.current?.checked == false
     ) {
       setPasswordStrength("Strong");
       setLineWidth("80%");
@@ -208,6 +208,9 @@ function App() {
                   className="check-boxes"
                   id="capital"
                 />
+                <span className="font-medium text-gray-700 dark:text-gray-200">
+                  Uppercase (A-Z)
+                </span>
               </label>
 
               <label
@@ -217,20 +220,9 @@ function App() {
                 <input
                   ref={checkRefSmall}
                   type="checkbox"
-                  className="check-boxes hidden"
+                  className="check-boxes"
                   id="small"
                 />
-                {/* <div className="border border-white  items-center justify-center rounded-sm p-[3px] flex">
-                  <FaCheck className="size-2 text-transparent peer-checked:block" />
-                </div> */}{" "}
-                <label className="flex items-center cursor-pointer">
-                  {/* Hidden native checkbox */}
-                  <input type="checkbox" className="peer hidden" />
-                  {/* Custom styled checkbox */}
-                  <div className="border border-white items-center justify-center rounded-sm p-[12px] flex">
-                    <FaCheck className="size-24 bg-white text-transparent hidden peer-checked:block" />
-                  </div>
-                </label>
                 <span className="font-medium text-gray-700 dark:text-gray-200">
                   Lowercase (a-z)
                 </span>
