@@ -51,12 +51,6 @@ function App() {
   };
 
   useEffect(() => {
-    generatePassword();
-    if (checkRefCap.current) checkRefCap.current.checked = true;
-    if (checkRefSmall.current) checkRefSmall.current.checked = true;
-  }, []);
-
-  useEffect(() => {
     if (
       passwordLength === 4 &&
       checkRefNums.current?.checked == false &&
@@ -114,6 +108,12 @@ function App() {
       setLineColor("lime");
     }
   }, [passwordLength]);
+
+  useEffect(() => {
+    if (checkRefCap.current) checkRefCap.current.checked = true;
+    if (checkRefSmall.current) checkRefSmall.current.checked = true;
+    generatePassword();
+  }, []);
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-900 text-white select-none">
