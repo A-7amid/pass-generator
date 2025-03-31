@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.icons {
+  @apply transition-all duration-200 cursor-pointer hover:bg-gray-700 rounded-md p-[10px] size-[39px] opacity-80;
+}
+
+.check-boxes {
+  @apply size-4 rounded shadow-sm border-gray-600 bg-gray-900 ring-offset-gray-900 checked:bg-red-600;
+}
