@@ -6,7 +6,7 @@ import { FaCheck } from "react-icons/fa";
 function App() {
   const [passwordLength, setPasswordLength] = useState(8);
   const [password, setPassword] = useState("");
-  const [showAlert, setShowAlert] = useState<boolean>(false);
+  // const [showAlert, setShowAlert] = useState<boolean>(false);
   const [passwordStrength, setPasswordStrength] = useState("weak");
   const [lineWidth, setLineWidth] = useState(`20%`);
   const [lineColor, setLineColor] = useState(`red`);
