@@ -1,15 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { LuCopy, LuRefreshCw } from "react-icons/lu";
 // import AlertCopied from "./components/AlertCopied";
+import { FaCheck } from "react-icons/fa";
 
 function App() {
-  const [passwordLength, setPasswordLength] = useState(4);
+  const [passwordLength, setPasswordLength] = useState(8);
   const [password, setPassword] = useState("");
-  // const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [passwordStrength, setPasswordStrength] = useState("weak");
+  const [lineWidth, setLineWidth] = useState(`20%`);
+  const [lineColor, setLineColor] = useState(`red`);
+
+  const checkRefCap = useRef<boolean>(true);
+  const checkRefSmall = useRef<boolean>(true);
+  const checkRefSymbols = useRef<boolean>(false);
+  const checkRefNums = useRef<boolean>(false);
 
   const AToZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const aToz = "abcdefghijklmnopqrstuvwxyz";
   const numbers = "0123456789";
   const symbols = "!@#$%^&*()_+[]{}|;:,.<>?";
+
+  useEffect(() => {
+    generatePassword();
+  }, []);
 
   let a = "";
 
@@ -41,11 +55,66 @@ function App() {
   };
 
   useEffect(() => {
-    generatePassword();
-  }, []);
+    if (
+      passwordLength === 4 &&
+      checkRefNums.current.checked == false &&
+      checkRefSymbols.current.checked == false
+    ) {
+      setPasswordStrength("Very Weak");
+
+      setLineWidth("20%");
+      setLineColor("red");
+    } else if (passwordLength === 4) {
+      setPasswordStrength("Weak");
+      setLineWidth("40%");
+      setLineColor("orange");
+    } else if (
+      passwordLength < 8 &&
+      checkRefNums.current.checked == false &&
+      checkRefSymbols.current.checked == false
+    ) {
+      setPasswordStrength("Weak");
+      setLineWidth("40%");
+      setLineColor("orange");
+    } else if (passwordLength < 8) {
+      setPasswordStrength("Medium");
+      setLineWidth("60%");
+      setLineColor("yellow");
+    } else if (
+      passwordLength < 12 &&
+      checkRefNums.current.checked == false &&
+      checkRefSymbols.current.checked == false
+    ) {
+      setPasswordStrength("Medium");
+
+      setLineWidth("60%");
+      setLineColor("yellow");
+    } else if (passwordLength < 12) {
+      setPasswordStrength("Strong");
+
+      setLineWidth("80%");
+      setLineColor("green");
+    } else if (
+      passwordLength < 16 &&
+      checkRefNums.current.checked == false &&
+      checkRefSymbols.current.checked == false
+    ) {
+      setPasswordStrength("Strong");
+      setLineWidth("80%");
+      setLineColor("green");
+    } else if (passwordLength < 16) {
+      setPasswordStrength("Very Strong");
+      setLineWidth("100%");
+      setLineColor("lime");
+    } else if (passwordLength > 16) {
+      setPasswordStrength("Very Strong");
+      setLineWidth("100%");
+      setLineColor("lime");
+    }
+  }, [passwordLength]);
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
+    <div className="flex items-center justify-center h-screen bg-gray-900 text-white select-none">
       <div className="bg-gray-800 border border-gray-700 rounded-lg p-5 w-110">
         <div>
           <h3 className="text-2xl font-semibold">Password Generator</h3>
@@ -57,35 +126,18 @@ function App() {
         <div className="flex mb-4 mt-4 border border-gray-700 rounded-lg px-1 py-1 justify-between items-center">
           <span className="pl-2">{password}</span>
           <div className="flex gap-x-1">
-            <svg
+            <LuCopy
+              className="icons"
               onClick={() => {
                 navigator.clipboard.writeText(password);
-                // setShowAlert(true);
-                // setTimeout(() => {
-                //   setShowAlert(false);
-                // }, 2000);
+                setShowAlert(true);
+                setTimeout(() => {
+                  setShowAlert(false);
+                }, 4000);
               }}
-              className="icons"
-              xmlns="http://www.w3.org/2000/svg"
-              height="22px"
-              viewBox="0 -960 960 960"
-              width="22px"
-              fill="#e3e3e3"
-            >
-              <path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z" />
-            </svg>
+            />
 
-            <svg
-              onClick={generatePassword}
-              className="icons"
-              xmlns="http://www.w3.org/2000/svg"
-              height="22px"
-              viewBox="0 -960 960 960"
-              width="22px"
-              fill="#e3e3e3"
-            >
-              <path d="M204-318q-22-38-33-78t-11-82q0-134 93-228t227-94h7l-64-64 56-56 160 160-160 160-56-56 64-64h-7q-100 0-170 70.5T240-478q0 26 6 51t18 49l-60 60ZM481-40 321-200l160-160 56 56-64 64h7q100 0 170-70.5T720-482q0-26-6-51t-18-49l60-60q22 38 33 78t11 82q0 134-93 228t-227 94h-7l64 64-56 56Z" />
-            </svg>
+            <LuRefreshCw className="icons" onClick={generatePassword} />
           </div>
         </div>
 
@@ -94,10 +146,46 @@ function App() {
           <input
             type="range"
             value={passwordLength}
-            maxLength={40}
+            min={4}
+            max={20}
             onChange={(e) => setPasswordLength(parseInt(e.target.value))}
-            className="px-2 py-1 bg-gray-800 border border-gray-700 rounded-md ml-2 text-sm text-gray-200"
+            className="bg-zinc-900 py-[3px] appearance-none h-1 rounded-lg cursor-pointer 
+           accent-black border-white"
+            style={{
+              background: `linear-gradient(to right, white ${
+                ((passwordLength - 4) / 16) * 100
+              }%, #18181b ${((passwordLength - 4) / 16) * 100}%)`,
+            }}
           />
+          <style>
+            {`
+              input[type="range"]::-webkit-slider-thumb {
+          appearance: none;
+          height: 16px;
+          width: 16px;
+          background: black;
+          border: 2px solid white;
+          border-radius: 50%;
+          cursor: pointer;
+              }
+              input[type="range"]::-moz-range-thumb {
+          height: 16px;
+          width: 16px;
+          background: black;
+          border: 2px solid white;
+          border-radius: 50%;
+          cursor: pointer;
+              }
+              input[type="range"]::-ms-thumb {
+          height: 16px;
+          width: 16px;
+          background: black;
+          border: 2px solid white;
+          border-radius: 50%;
+          cursor: pointer;
+              }
+            `}
+          </style>
         </div>
 
         <div className="font-medium text-gray-200 text-sm">
@@ -110,18 +198,37 @@ function App() {
             <div className="grid grid-cols-2 items-start gap-3">
               <label
                 htmlFor="capital"
-                className="inline-flex items-center gap-3"
+                className="inline-flex items-center gap-x-2"
               >
-                <input type="checkbox" className="check-boxes" id="capital" />
-
-                <span className="font-medium text-gray-700 dark:text-gray-200">
-                  Uppercase (A-Z)
-                </span>
+                <input
+                  ref={checkRefCap}
+                  type="checkbox"
+                  className="check-boxes"
+                  id="capital"
+                />
               </label>
 
-              <label htmlFor="small" className="inline-flex items-center gap-3">
-                <input type="checkbox" className="check-boxes" id="small" />
-
+              <label
+                htmlFor="small"
+                className="inline-flex items-center gap-x-2"
+              >
+                <input
+                  ref={checkRefSmall}
+                  type="checkbox"
+                  className="check-boxes hidden"
+                  id="small"
+                />
+                {/* <div className="border border-white  items-center justify-center rounded-sm p-[3px] flex">
+                  <FaCheck className="size-2 text-transparent peer-checked:block" />
+                </div> */}{" "}
+                <label className="flex items-center cursor-pointer">
+                  {/* Hidden native checkbox */}
+                  <input type="checkbox" className="peer hidden" />
+                  {/* Custom styled checkbox */}
+                  <div className="border border-white items-center justify-center rounded-sm p-[12px] flex">
+                    <FaCheck className="size-24 bg-white text-transparent hidden peer-checked:block" />
+                  </div>
+                </label>
                 <span className="font-medium text-gray-700 dark:text-gray-200">
                   Lowercase (a-z)
                 </span>
@@ -129,9 +236,14 @@ function App() {
 
               <label
                 htmlFor="number"
-                className="inline-flex items-center gap-3"
+                className="inline-flex items-center gap-x-2"
               >
-                <input type="checkbox" className="check-boxes" id="number" />
+                <input
+                  ref={checkRefNums}
+                  type="checkbox"
+                  className="check-boxes"
+                  id="number"
+                />
 
                 <span className="font-medium text-gray-700 dark:text-gray-200">
                   Numbers (0-9)
@@ -140,9 +252,14 @@ function App() {
 
               <label
                 htmlFor="symbol"
-                className="inline-flex items-center gap-3"
+                className="inline-flex items-center gap-x-2"
               >
-                <input type="checkbox" className="check-boxes" id="symbol" />
+                <input
+                  ref={checkRefSymbols}
+                  type="checkbox"
+                  className="check-boxes"
+                  id="symbol"
+                />
 
                 <span className="font-medium text-gray-700 dark:text-gray-200">
                   Symbols (!@#$%)
@@ -154,11 +271,16 @@ function App() {
 
         <div className="flex flex-col gap-y-2 mb-4 mt-4">
           <div className="flex items-center justify-between">
-            <span className="font-medium text-sm">Password Length</span>
-            <span className="text-sm text-gray-300">Strong</span>
+            <span className="font-medium text-sm">Password Strength</span>
+            <span className="text-sm text-gray-300">{passwordStrength}</span>
           </div>
 
-          <div className="w-full line-through"></div>
+          <div className="w-full bg-zinc-700 relative flex h-2 rounded-3xl">
+            <div
+              style={{ backgroundColor: lineColor, width: lineWidth }}
+              className={`h-full rounded-3xl`}
+            ></div>
+          </div>
         </div>
 
         <button
@@ -172,8 +294,8 @@ function App() {
       {/* {showAlert && (
         <div className="absolute top-7">
           <AlertCopied setShowAlert={setShowAlert} />
-        </div> */}
-      {/* )} */}
+        </div>
+      )} */}
     </div>
   );
 }
