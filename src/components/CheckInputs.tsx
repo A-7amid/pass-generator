@@ -1,14 +1,14 @@
 import { FaCheck } from "react-icons/fa";
 
 interface CheckInputsProps {
-  checkRefType: React.RefObject<HTMLInputElement>;
+  checkRefType: React.RefObject<HTMLInputElement | null>;
   id: string;
   name: string;
 }
 
 const CheckInputs = ({ checkRefType, id, name }: CheckInputsProps) => {
   const handleCheck = () => {
-    checkRefType.current.classList.toggle("bg-white");
+    checkRefType.current?.classList.toggle("bg-white");
   };
 
   return (

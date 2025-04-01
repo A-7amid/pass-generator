@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { FaCheck } from "react-icons/fa";
 import { LuCopy, LuRefreshCw } from "react-icons/lu";
 import CheckInputs from "./components/CheckInputs";
 import AlertCopied from "./components/AlertCopied";
