@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import { FaCheck } from "react-icons/fa";
 import { LuCopy, LuRefreshCw } from "react-icons/lu";
-// import AlertCopied from "./components/AlertCopied";
-// import { FaCheck } from "react-icons/fa";
+import CheckInputs from "./components/CheckInputs";
+import AlertCopied from "./components/AlertCopied";
 
 function App() {
   const [passwordLength, setPasswordLength] = useState(8);
   const [password, setPassword] = useState("");
-  // const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
   const [passwordStrength, setPasswordStrength] = useState("weak");
   const [lineWidth, setLineWidth] = useState(`20%`);
   const [lineColor, setLineColor] = useState(`red`);
@@ -24,23 +25,19 @@ function App() {
   let a = "";
 
   const generatePassword = () => {
-    const capital = document.getElementById("capital") as HTMLInputElement;
-    const small = document.getElementById("small") as HTMLInputElement;
-    const number = document.getElementById("number") as HTMLInputElement;
-    const symbol = document.getElementById("symbol") as HTMLInputElement;
-
-    const arr = [""];
+    const arr = [];
     let mainArr: string[] = [];
 
-    if (capital.checked) arr.push(AToZ);
-    if (small.checked) arr.push(aToz);
-    if (number.checked) arr.push(numbers);
-    if (symbol.checked) arr.push(symbols);
+    if (checkRefCap.current?.checked) arr.push(AToZ);
+    if (checkRefSmall.current?.checked) arr.push(aToz);
+    if (checkRefNums.current?.checked) arr.push(numbers);
+    if (checkRefSymbols.current?.checked) arr.push(symbols);
     console.log(arr);
 
     for (let i = 0; i < passwordLength; i++) {
       mainArr.splice(0, 0, arr[Math.floor(Math.random() * arr.length)]);
     }
+    console.log(arr);
     console.log(mainArr);
 
     for (let i = 0; i < passwordLength; i++) {
@@ -132,10 +129,10 @@ function App() {
               className="icons"
               onClick={() => {
                 navigator.clipboard.writeText(password);
-                // setShowAlert(true);
-                // setTimeout(() => {
-                //   setShowAlert(false);
-                // }, 4000);
+                setShowAlert(true);
+                setTimeout(() => {
+                  setShowAlert(false);
+                }, 4000);
               }}
             />
 
@@ -198,66 +195,48 @@ function App() {
             <legend className="sr-only">Checkboxes</legend>
 
             <div className="grid grid-cols-2 items-start gap-3">
-              <label
+              {/* <label
                 htmlFor="capital"
                 className="inline-flex items-center gap-x-2"
-              >
-                <input
-                  ref={checkRefCap}
-                  type="checkbox"
-                  className="check-boxes"
-                  id="capital"
-                />
-                <span className="font-medium text-gray-700 dark:text-gray-200">
-                  Uppercase (A-Z)
-                </span>
-              </label>
+              > */}
+              <CheckInputs
+                checkRefType={checkRefCap}
+                name="Uppercase (A-Z)"
+                id="capital"
+              />
+              {/* </label> */}
 
               <label
                 htmlFor="small"
                 className="inline-flex items-center gap-x-2"
               >
-                <input
-                  ref={checkRefSmall}
-                  type="checkbox"
-                  className="check-boxes"
+                <CheckInputs
+                  checkRefType={checkRefSmall}
+                  name="Lowercase (a-z)"
                   id="small"
                 />
-                <span className="font-medium text-gray-700 dark:text-gray-200">
-                  Lowercase (a-z)
-                </span>
               </label>
 
               <label
                 htmlFor="number"
                 className="inline-flex items-center gap-x-2"
               >
-                <input
-                  ref={checkRefNums}
-                  type="checkbox"
-                  className="check-boxes"
+                <CheckInputs
+                  checkRefType={checkRefNums}
+                  name="Numbers (0-9))"
                   id="number"
                 />
-
-                <span className="font-medium text-gray-700 dark:text-gray-200">
-                  Numbers (0-9)
-                </span>
               </label>
 
               <label
                 htmlFor="symbol"
                 className="inline-flex items-center gap-x-2"
               >
-                <input
-                  ref={checkRefSymbols}
-                  type="checkbox"
-                  className="check-boxes"
+                <CheckInputs
+                  checkRefType={checkRefSymbols}
+                  name="Symbols (!@#$%)"
                   id="symbol"
                 />
-
-                <span className="font-medium text-gray-700 dark:text-gray-200">
-                  Symbols (!@#$%)
-                </span>
               </label>
             </div>
           </fieldset>
@@ -285,11 +264,11 @@ function App() {
         </button>
       </div>
 
-      {/* {showAlert && (
+      {showAlert && (
         <div className="absolute top-7">
           <AlertCopied setShowAlert={setShowAlert} />
         </div>
-      )} */}
+      )}
     </div>
   );
 }
