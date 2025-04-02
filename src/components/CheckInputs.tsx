@@ -1,9 +1,8 @@
-import { useEffect } from "react";
 import { FaCheck } from "react-icons/fa";
 
 interface CheckInputsProps {
   checkType: boolean;
-  setCheckType: boolean;
+  setCheckType: React.Dispatch<React.SetStateAction<boolean>>;
   id: string;
   name: string;
 }

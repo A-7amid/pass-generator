@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { LuCopy, LuRefreshCw } from "react-icons/lu";
 import CheckInputs from "./components/CheckInputs";
 import AlertCopied from "./components/AlertCopied";
