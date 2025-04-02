@@ -30,7 +30,7 @@ const AlertCopied = ({ setShowAlert }: AlertCopiedProps) => {
           </strong>
 
           <p className="mt-0.5 text-sm text-gray-700 dark:text-gray-200">
-            Your product changes have been saved.
+            Your password have been copied.
           </p>
         </div>
 

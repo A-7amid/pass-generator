@@ -10,11 +10,10 @@ function App() {
   const [passwordStrength, setPasswordStrength] = useState("weak");
   const [lineWidth, setLineWidth] = useState(`20%`);
   const [lineColor, setLineColor] = useState(`red`);
-
-  const checkRefCap = useRef<HTMLInputElement>(null);
-  const checkRefSmall = useRef<HTMLInputElement>(null);
-  const checkRefSymbols = useRef<HTMLInputElement>(null);
-  const checkRefNums = useRef<HTMLInputElement>(null);
+  const [isCapital, setIsCapital] = useState(true);
+  const [isSmall, setIsSmall] = useState(true);
+  const [isNumbers, setIsNumbers] = useState(false);
+  const [isSymbols, setIsSymbols] = useState(false);
 
   const AToZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const aToz = "abcdefghijklmnopqrstuvwxyz";
@@ -27,10 +26,10 @@ function App() {
     const arr = [];
     let mainArr: string[] = [];
 
-    if (checkRefCap.current?.checked) arr.push(AToZ);
-    if (checkRefSmall.current?.checked) arr.push(aToz);
-    if (checkRefNums.current?.checked) arr.push(numbers);
-    if (checkRefSymbols.current?.checked) arr.push(symbols);
+    if (isCapital) arr.push(AToZ);
+    if (isSmall) arr.push(aToz);
+    if (isNumbers) arr.push(numbers);
+    if (isSymbols) arr.push(symbols);
     console.log(arr);
 
     for (let i = 0; i < passwordLength; i++) {
@@ -47,58 +46,35 @@ function App() {
   };
 
   useEffect(() => {
-    if (
-      passwordLength === 4 &&
-      checkRefNums.current?.checked == false &&
-      checkRefSymbols.current?.checked == false
-    ) {
+    if (passwordLength < 6 && !isNumbers && !isSymbols) {
       setPasswordStrength("Very Weak");
-
       setLineWidth("20%");
       setLineColor("red");
-    } else if (passwordLength === 4) {
+    } else if (passwordLength < 6) {
       setPasswordStrength("Weak");
       setLineWidth("40%");
       setLineColor("orange");
-    } else if (
-      passwordLength < 8 &&
-      checkRefNums.current?.checked == false &&
-      checkRefSymbols.current?.checked == false
-    ) {
+    } else if (passwordLength < 8 && !isNumbers && !isSymbols) {
       setPasswordStrength("Weak");
       setLineWidth("40%");
       setLineColor("orange");
-    } else if (passwordLength < 8) {
+    } else if (passwordLength < 10) {
       setPasswordStrength("Medium");
       setLineWidth("60%");
       setLineColor("yellow");
-    } else if (
-      passwordLength < 12 &&
-      checkRefNums.current?.checked == false &&
-      checkRefSymbols.current?.checked == false
-    ) {
+    } else if (passwordLength < 12 && !isNumbers && !isSymbols) {
       setPasswordStrength("Medium");
-
       setLineWidth("60%");
       setLineColor("yellow");
-    } else if (passwordLength < 12) {
-      setPasswordStrength("Strong");
-
-      setLineWidth("80%");
-      setLineColor("green");
-    } else if (
-      passwordLength < 16 &&
-      checkRefNums.current?.checked == false &&
-      checkRefSymbols.current?.checked == false
-    ) {
+    } else if (passwordLength > 12) {
       setPasswordStrength("Strong");
       setLineWidth("80%");
       setLineColor("green");
-    } else if (passwordLength < 16) {
-      setPasswordStrength("Very Strong");
-      setLineWidth("100%");
-      setLineColor("lime");
-    } else if (passwordLength > 16) {
+    } else if (passwordLength < 16 && !isNumbers && !isSymbols) {
+      setPasswordStrength("Strong");
+      setLineWidth("80%");
+      setLineColor("green");
+    } else if (passwordLength >= 16) {
       setPasswordStrength("Very Strong");
       setLineWidth("100%");
       setLineColor("lime");
@@ -106,10 +82,12 @@ function App() {
   }, [passwordLength]);
 
   useEffect(() => {
-    if (checkRefCap.current) checkRefCap.current.checked = true;
-    if (checkRefSmall.current) checkRefSmall.current.checked = true;
     generatePassword();
   }, []);
+
+  useEffect(() => {
+    generatePassword();
+  }, [passwordLength, isCapital, isSymbols, isNumbers, isSmall]);
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-900 text-white select-none">
@@ -146,7 +124,10 @@ function App() {
             value={passwordLength}
             min={4}
             max={20}
-            onChange={(e) => setPasswordLength(parseInt(e.target.value))}
+            onChange={(e) => {
+              setPasswordLength(parseInt(e.target.value));
+              generatePassword();
+            }}
             className="bg-zinc-900 py-[3px] appearance-none h-1 rounded-lg cursor-pointer 
            accent-black border-white"
             style={{
@@ -199,7 +180,8 @@ function App() {
                 className="inline-flex items-center gap-x-2"
               > */}
               <CheckInputs
-                checkRefType={checkRefCap}
+                checkType={isCapital}
+                setCheckType={setIsCapital}
                 name="Uppercase (A-Z)"
                 id="capital"
               />
@@ -210,7 +192,8 @@ function App() {
                 className="inline-flex items-center gap-x-2"
               >
                 <CheckInputs
-                  checkRefType={checkRefSmall}
+                  checkType={isSmall}
+                  setCheckType={setIsSmall}
                   name="Lowercase (a-z)"
                   id="small"
                 />
@@ -221,7 +204,8 @@ function App() {
                 className="inline-flex items-center gap-x-2"
               >
                 <CheckInputs
-                  checkRefType={checkRefNums}
+                  checkType={isNumbers}
+                  setCheckType={setIsNumbers}
                   name="Numbers (0-9))"
                   id="number"
                 />
@@ -232,7 +216,8 @@ function App() {
                 className="inline-flex items-center gap-x-2"
               >
                 <CheckInputs
-                  checkRefType={checkRefSymbols}
+                  checkType={isSymbols}
+                  setCheckType={setIsSymbols}
                   name="Symbols (!@#$%)"
                   id="symbol"
                 />
