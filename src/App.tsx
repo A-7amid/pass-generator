@@ -128,7 +128,7 @@ function App() {
               setPasswordLength(parseInt(e.target.value));
               generatePassword();
             }}
-            className="bg-zinc-900 py-[3px] appearance-none h-1 rounded-lg cursor-pointer 
+            className="bg-zinc-900 py-[3px] appearance-none h-1 rounded-lg cursor-pointer
            accent-black border-white"
             style={{
               background: `linear-gradient(to right, white ${
@@ -175,17 +175,12 @@ function App() {
             <legend className="sr-only">Checkboxes</legend>
 
             <div className="grid grid-cols-2 items-start gap-3">
-              {/* <label
-                htmlFor="capital"
-                className="inline-flex items-center gap-x-2"
-              > */}
               <CheckInputs
                 checkType={isCapital}
                 setCheckType={setIsCapital}
                 name="Uppercase (A-Z)"
                 id="capital"
               />
-              {/* </label> */}
 
               <label
                 htmlFor="small"
